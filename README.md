@@ -1,27 +1,28 @@
-# EC2-Instance-Flask
+## EC2-Instance-Flask
 Easy Step by Step to Setup Flask on EC2 AWS
 
-**Step 1 :**
+## Step 1 :
 launch new instance on your EC2 Aws 
 
-**STEP 2:**
+## STEP 2:
 choose your Prefered on - demand use t3micro  etc.....
 
-**STEP 3:**
-
-set up your Securituy group 
-
-*> ssh , Port Range : 22*
-
-*> http , Port Range : 80*
-
-*> https , Port Range : 442*
-
-*> custom , Port Range : 8080*
+## STEP 3:
 
 
-------------------------------------
+### Set up your Securituy group 
 
+- ssh , Port Range : 22
+
+- http , Port Range : 80
+
+- https , Port Range : 442
+
+- custom , Port Range : 8080
+
+
+### Connect to your CLI and Copy Paste the Following: 
+```bash
 sudo apt-get update
 
 sudo apt-get install python3-venv
@@ -34,13 +35,17 @@ python3 -m venv venv #create a python Venev
 
 source venv/bin/activate #Activate the virtual Environment 
 
-#Thren you can insatall all the independence
+#Then you can insatall all the independence
 
 pip install flask 
 
-sudo nano app.py 
+sudo nano app.py
+```
 
-``from flask import Flask
+### Inside the Nano  app.py Text  Editor copy paste 
+
+```bash
+from flask import Flask
 app = Flask(__name__)
 
 @app.route("/display", methods=["GET"])
@@ -55,18 +60,23 @@ def hello_world():
 if __name__ == "__main__":
     app.run()``
 
+```
 
+### Install the Gunicorn 
 
+```bash
 pip install gunicorn
 
-
 gunicorn -b 0.0.0.0:8000 app:app
+```
 
+### Setup your System service to Ensure your Gunicorn Load at start up
+```bash
 sudo nano /etc/systemd/system/helloworld.service
+````
+### Then Copy paste this into your nano text Editor   
 
-
-```   
-
+```bash 
 [Unit]
 Description=Gunicorn instance to serve helloworld
 After=network.target
@@ -85,6 +95,9 @@ WantedBy=multi-user.target
 
 ```
 
+### Then Follow the following to reload, Enable
+
+```bash
 sudo systemctl daemon-reload
 
 
@@ -92,8 +105,19 @@ sudo systemctl start helloworld
 
 sudo systemctl enable helloworld
 
+```
+
+### Use this to test if everything is working Fine 
+
+```bash 
 curl localhost:8000
 
+# this should return "Hello Ayocrypt 😎" in your Flask app.py
+```
+
+### We Proceed to install the Nginx to enable External Routing or requests
+
+```bash 
 sudo apt-get install  nginx
 
 
@@ -103,9 +127,13 @@ sudo systemctl enable nginx
 
 use your Public address 
 
-sudo  /etc/nginx/sites-available/default
+sudo nano   /etc/nginx/sites-available/default
+```
 
-``##
+
+### Then copy paste the following into the nano text Editor we only re route the request to our Gunicorn 
+
+```bash
 # You should look at the following URL's in order to grasp a solid understanding
 # of Nginx configuration files in order to fully unleash the power of Nginx.
 # https://www.nginx.com/resources/wiki/start/
@@ -209,6 +237,9 @@ server {
 #               try_files $uri $uri/ =404;
 #       }
 #} 
-``
+```
 
-udo systemctl restart nginx
+### Then lastly Restart your nginx
+
+```bash
+sudo systemctl restart nginx
