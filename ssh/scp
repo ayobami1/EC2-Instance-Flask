@@ -1,0 +1,1 @@
+scp -i app_builder.pem -r ubuntu@13.53.37.27:~/test ~/Desktop/aws_server
