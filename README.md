@@ -26,6 +26,7 @@ choose your Prefered on - demand use t3micro  etc.....
 sudo apt-get update
 
 sudo apt-get install python3-venv
+sudo apt install python3-pip
 
 mkdir helloworld  # create a directory to save your files
 
